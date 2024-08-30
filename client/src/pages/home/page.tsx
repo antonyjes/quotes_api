@@ -1,11 +1,10 @@
+import { Navbar } from "@/components/navbar";
 import RootLayout from "../layout"
 
 const HomePage = () => {
     return(
         <RootLayout>
-            <div>
-                <p>Welcome to the app</p>
-            </div>
+            <Navbar />
         </RootLayout>
     )
 }
