@@ -35,9 +35,10 @@ export const Navbar = () => {
   ];
 
   return (
-    <div className="border-b">
+    <div>
       <div className="flex h-16 items-center px-4">
         <div className="flex items-center">
+          <img src="/logo.png" alt="logo" className="w-[5rem] h-[5rem]" />
           <h1 className="text-3xl font-bold uppercase">Frases diarias</h1>
         </div>
         <nav className="flex items-center space-x-4 lg:space-x-6 mx-[2rem]">
