@@ -6,6 +6,7 @@ const QuoteSchema = new mongoose.Schema({
         required: true
     },
     author: String,
+    topic: String,
     submittedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
