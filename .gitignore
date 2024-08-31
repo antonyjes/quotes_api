@@ -32,3 +32,4 @@ node_modules/
 
 # Other
 server/public
+server/.env
