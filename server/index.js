@@ -11,6 +11,7 @@ import path from "path";
 import multer from "multer";
 import { registerUser, registerAdmin } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
+import quoteRoutes from "./routes/quote.js";
 
 // CONFIGURATIONS
 const __filename = fileURLToPath(import.meta.url);
@@ -57,6 +58,7 @@ app.post("/admin/register", adminUpload.fields([{ name: "picture" }]), registerA
 
 // ROUTES
 app.use("/auth", authRoutes);
+app.use("/quote", quoteRoutes);
 
 // MONGODB CONNECTION
 const PORT = process.env.PORT || 9000;
