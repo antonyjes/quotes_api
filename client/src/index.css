@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -57,6 +59,14 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  .font-pacifico {
+    font-family: 'Pacifico', cursive;
+  }
+
+  .text-shadow-custom {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
 }
 
 @layer base {
@@ -67,3 +77,5 @@
     @apply bg-background text-foreground;
   }
 }
+
+
