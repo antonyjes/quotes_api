@@ -4,7 +4,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { useSelector } from "react-redux";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { User } from "@/lib/data";
-import { Edit, LogOut } from "lucide-react";
+import { AlignJustifyIcon, Edit, LogOut } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 export const Navbar = () => {
@@ -36,12 +36,12 @@ export const Navbar = () => {
 
   return (
     <div>
-      <div className="flex h-16 items-center px-4">
+      <div className="flex h-16 items-center px-4 justify-between">
         <div className="flex items-center">
           <img src="/logo.png" alt="logo" className="w-[5rem] h-[5rem]" />
           <h1 className="text-3xl font-bold uppercase">Frases diarias</h1>
         </div>
-        <nav className="flex items-center space-x-4 lg:space-x-6 mx-[2rem]">
+        <nav className="hidden lg:flex items-center space-x-4 lg:space-x-6 mx-[2rem]">
           {routes.map((route) => (
             <a
               key={route.href}
@@ -57,7 +57,7 @@ export const Navbar = () => {
             </a>
           ))}
         </nav>
-        <div className="ml-auto flex items-center space-x-4">
+        <div className="hidden lg:flex ml-auto items-center space-x-4">
           <ModeToggle />
           {isAuth ? (
             <DropdownMenu>
@@ -85,6 +85,47 @@ export const Navbar = () => {
                 <a href="/register" className={cn(buttonVariants({ variant: "default", size: "sm"}), "px-4 py-2")}>Registrarse</a>
             </nav>
           )}
+        </div>
+        <div className="block lg:hidden">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <AlignJustifyIcon className="h-6 w-6" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {routes.map((route) => (
+                <DropdownMenuItem key={route.href}>
+                  <a
+                    href={route.href}
+                    className={cn(
+                      "text-sm font-medium transition-colors hover:text-primary",
+                      route.active
+                        ? "text-black dark:text-white"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {route.label}
+                  </a>
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              {
+                isAuth ? (
+                    <DropdownMenuItem>
+                      Cerrar sesión
+                    </DropdownMenuItem>
+                ) : (
+                  <>
+                    <DropdownMenuItem>
+                      Iniciar sesión
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      Registrarse
+                    </DropdownMenuItem>
+                  </>
+                )
+              }
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>
