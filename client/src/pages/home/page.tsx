@@ -3,6 +3,13 @@ import RootLayout from "../layout";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { rapidApiKey } from "../../../config";
+import { Bookmark, Download, TwitterIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const HomePage = () => {
   const [quote, setQuote] = useState("");
@@ -64,15 +71,58 @@ const HomePage = () => {
           <Separator />
           <div className="flex items-center justify-center">
             {backgroundImage ? (
-              <div
-                className="bg-cover bg-center w-[900px] h-[500px] rounded-lg flex items-center justify-center"
-                style={{ backgroundImage: backgroundImage }}
-              >
-                <div className="p-10 text-5xl text-center text-shadow-custom">
-                  <p className="font-pacifico">{quote}</p>
-                  {author && author !== "Anonymous" ? (
-                    <p className="text-3xl font-bold mt-5">{author}</p>
-                  ) : null}
+              <div className="flex flex-row">
+                <div
+                  className="bg-cover bg-center w-[900px] h-[500px] rounded-lg flex items-center justify-center"
+                  style={{ backgroundImage: backgroundImage }}
+                >
+                  <div className="p-10 text-5xl text-center text-shadow-custom">
+                    <p className="font-pacifico">{quote}</p>
+                    {author && author !== "Anonymous" ? (
+                      <p className="text-3xl font-bold mt-5">{author}</p>
+                    ) : null}
+                  </div>
+                </div>
+                <div className="grid p-8 gap-4">
+                  <div className="grid grid-rows-3">
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <TwitterIcon className="w-6 h-6" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Compartir en Twitter</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Bookmark className="w-6 h-6" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Añadir a favoritos</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Download className="w-6 h-6" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Descargar</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                  <div></div>
                 </div>
               </div>
             ) : (
