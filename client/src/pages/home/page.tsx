@@ -7,6 +7,7 @@ import { rapidApiKey } from "../../../config";
 const HomePage = () => {
   const [quote, setQuote] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
+  const [author, setAuthor] = useState("Anonymous");
 
   const dateToday = new Date().toLocaleDateString("es-MX", {
     weekday: "long",
@@ -20,12 +21,13 @@ const HomePage = () => {
       // Request random quote
       const response = await fetch("http://localhost:3003/quote/random-quote");
       const quote = await response.json();
+      setAuthor(quote.a);
 
       const data = new FormData();
       data.append("source_language", "en");
       data.append("target_language", "es");
       data.append("text", quote.q);
-      
+
       const headers = new Headers({
         "x-rapidapi-host": "text-translator2.p.rapidapi.com",
         "x-rapidapi-key": rapidApiKey,
@@ -66,8 +68,11 @@ const HomePage = () => {
                 className="bg-cover bg-center w-[900px] h-[500px] rounded-lg flex items-center justify-center"
                 style={{ backgroundImage: backgroundImage }}
               >
-                <div className="p-10 text-5xl text-center font-pacifico text-shadow-custom">
-                  {quote}
+                <div className="p-10 text-5xl text-center text-shadow-custom">
+                  <p className="font-pacifico">{quote}</p>
+                  {
+                    author && author !== "Anonymous" ? <p className="text-3xl font-bold mt-5">{author}</p> : null
+                  }
                 </div>
               </div>
             ) : (
