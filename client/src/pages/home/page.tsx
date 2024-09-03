@@ -71,9 +71,9 @@ const HomePage = () => {
           <Separator />
           <div className="flex items-center justify-center">
             {backgroundImage ? (
-              <div className="flex flex-row">
+              <div className="flex flex-col lg:flex-row">
                 <div
-                  className="bg-cover bg-center w-[900px] h-[500px] rounded-lg flex items-center justify-center"
+                  className="bg-cover bg-center rounded-lg flex items-center justify-center max-w-[900px] h-[500px]"
                   style={{ backgroundImage: backgroundImage }}
                 >
                   <div className="p-10 text-5xl text-center text-shadow-custom">
@@ -83,7 +83,7 @@ const HomePage = () => {
                     ) : null}
                   </div>
                 </div>
-                <div className="grid p-8 gap-4">
+                <div className="flex p-8 gap-4">
                   <div className="grid grid-rows-3">
                     <div>
                       <TooltipProvider>
@@ -122,7 +122,6 @@ const HomePage = () => {
                       </TooltipProvider>
                     </div>
                   </div>
-                  <div></div>
                 </div>
               </div>
             ) : (
