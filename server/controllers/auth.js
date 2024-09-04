@@ -8,7 +8,11 @@ export const registerUser = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
-    const pictureFile = req.files["picture"][0];
+    
+    let pictureFile = null;
+    if (req.files && req.files["picture"] && req.files["picture"].length > 0) {
+      pictureFile = req.files["picture"][0];     
+    }
 
     const newUser = new User({
       firstName,
