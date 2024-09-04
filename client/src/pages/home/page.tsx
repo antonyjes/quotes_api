@@ -1,8 +1,8 @@
 import { Heading } from "@/components/heading";
-import RootLayout from "../layout";
+import RootLayout from "@/pages/layout";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
-import { rapidApiKey } from "../../../config";
+import { rapidApiKey } from "@/lib/config";
 import { Bookmark, Download, TwitterIcon } from "lucide-react";
 import {
   Tooltip,
