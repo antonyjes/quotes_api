@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ModeToggle } from "@/components/mode-toggle";
 import { useSelector } from "react-redux";
 import {
@@ -15,6 +15,8 @@ import { AlignJustifyIcon, Bookmark, Edit, LogOut } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
+
   const isAuth = Boolean(
     useSelector((state: { token: string }) => state.token)
   );
@@ -150,8 +152,8 @@ export const Navbar = () => {
                 </>
               ) : (
                 <>
-                  <DropdownMenuItem>Iniciar sesión</DropdownMenuItem>
-                  <DropdownMenuItem>Registrarse</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/login")}>Iniciar sesión</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/register")}>Registrarse</DropdownMenuItem>
                 </>
               )}
             </DropdownMenuContent>
