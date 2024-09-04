@@ -71,7 +71,7 @@ const HomePage = () => {
           <Separator />
           <div className="flex items-center justify-center">
             {backgroundImage ? (
-              <div className="flex flex-col lg:flex-row">
+              <div className="flex flex-row">
                 <div
                   className="bg-cover bg-center rounded-lg flex items-center justify-center max-w-[900px] h-[500px]"
                   style={{ backgroundImage: backgroundImage }}
