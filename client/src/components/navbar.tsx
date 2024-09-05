@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ModeToggle } from "@/components/mode-toggle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,11 +11,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { User } from "@/lib/data";
-import { AlignJustifyIcon, Bookmark, Edit, LogOut } from "lucide-react";
+import {
+  AlignJustifyIcon,
+  Bookmark,
+  Edit,
+  LogOut,
+  UserCircle,
+} from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import { setLogout } from "@/state";
 
 export const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const isAuth = Boolean(
     useSelector((state: { token: string }) => state.token)
@@ -73,11 +81,15 @@ export const Navbar = () => {
           {isAuth ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <img
-                  className="w-[5rem] h-[5rem] rounded-full p-2 object-cover"
-                  src={`http://localhost:3003/assets/${user?.picturePath}`}
-                  alt={`${user?.firstName}`}
-                />
+                {user.picturePath ? (
+                  <img
+                    className="w-[3rem] h-[3rem] rounded-full object-cover"
+                    src={`http://localhost:3003/assets/${user?.picturePath}`}
+                    alt={`${user?.firstName}`}
+                  />
+                ) : (
+                  <UserCircle className="w-[3rem] h-[3rem] rounded-full" />
+                )}
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>
@@ -93,7 +105,12 @@ export const Navbar = () => {
                   <Edit className="mr-2 h-4 w-4" />
                   Editar perfil
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    dispatch(setLogout());
+                    navigate("/");
+                  }}
+                >
                   <LogOut className="mr-2 h-4 w-4" />
                   Cerrar sesión
                 </DropdownMenuItem>
@@ -148,12 +165,23 @@ export const Navbar = () => {
                 <>
                   <DropdownMenuItem>Guardados</DropdownMenuItem>
                   <DropdownMenuItem>Editar perfil</DropdownMenuItem>
-                  <DropdownMenuItem>Cerrar sesión</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      dispatch(setLogout());
+                      navigate("/");
+                    }}
+                  >
+                    Cerrar sesión
+                  </DropdownMenuItem>
                 </>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={() => navigate("/login")}>Iniciar sesión</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/register")}>Registrarse</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/login")}>
+                    Iniciar sesión
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/register")}>
+                    Registrarse
+                  </DropdownMenuItem>
                 </>
               )}
             </DropdownMenuContent>
