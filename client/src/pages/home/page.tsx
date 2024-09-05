@@ -10,8 +10,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useSelector } from "react-redux";
+import { User } from "@/lib/data";
+import { toast } from "react-toastify";
 
 const HomePage = () => {
+  const user = useSelector((state: { user: User | null }) => state.user);
+
   const [quote, setQuote] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
   const [author, setAuthor] = useState("Anonymous");
@@ -23,9 +28,20 @@ const HomePage = () => {
     day: "numeric",
   });
 
+  const preloadImages = () => {
+    for (let i = 1; i < 11; i++) {
+      const img = new Image();
+      img.src = `/background-images/bg${i}.png`;
+    }
+  };
+
+  const getRandomImage = () => {
+    const randomIndex = Math.floor(Math.random() * 10) + 1;
+    setBackgroundImage(`url(/background-images/bg${randomIndex}.png)`);
+  };
+
   const getQuote = async () => {
     try {
-      // Request random quote
       const response = await fetch("http://localhost:3003/quote/random-quote");
       const quote = await response.json();
       setAuthor(quote.a);
@@ -52,16 +68,91 @@ const HomePage = () => {
       );
       const translated = await translatedQuote.json();
       setQuote(translated.data.translatedText);
-
-      setBackgroundImage('url("https://picsum.photos/900/500")');
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    preloadImages();
+    getRandomImage();
     getQuote();
   }, []);
+
+  const handleTwitterShare = async () => {
+    try {
+      if (user) {
+        console.log("You can share this quote");
+      } else {
+        toast.error("Inicia sesion para compartir");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBookmark = async () => {
+    try {
+      if (user) {
+        console.log("You can bookmark this quote");
+      } else {
+        toast.error("Inicia sesion para guardar");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      if (user) {
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        canvas.width = 900;
+        canvas.height = 500;
+
+        const backgroundImg = new Image();
+        backgroundImg.src = backgroundImage
+          .replace('url("', "")
+          .replace('")', "");
+
+        await new Promise((resolve) => {
+          backgroundImg.onload = resolve;
+        });
+
+        context?.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+
+        context!.font = "50px Pacifico";
+        context!.fillStyle = "white";
+        context!.textAlign = "center";
+        context!.shadowColor = "black";
+        context!.shadowBlur = 10;
+        context!.shadowOffsetX = 5;
+        context!.shadowOffsetY = 5;
+
+        context?.fillText(quote, canvas.width / 2, canvas.height / 2);
+
+        if (author !== "Anonymous") {
+          context!.font = "30px Roboto";
+          context!.fillText(author, canvas.width / 2, canvas.height / 2 + 50);
+        }
+
+        const imageData = canvas.toDataURL("image/png");
+
+        const downloadLink = document.createElement("a");
+        downloadLink.href = imageData;
+        downloadLink.download = "quote.png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+      } else {
+        toast.error("Inicia sesion para descargar");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <RootLayout>
@@ -89,7 +180,10 @@ const HomePage = () => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <TwitterIcon className="w-6 h-6" />
+                            <TwitterIcon
+                              className="w-6 h-6"
+                              onClick={handleTwitterShare}
+                            />
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>Compartir en Twitter</p>
@@ -101,7 +195,10 @@ const HomePage = () => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <Bookmark className="w-6 h-6" />
+                            <Bookmark
+                              className="w-6 h-6"
+                              onClick={handleBookmark}
+                            />
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>Añadir a favoritos</p>
@@ -113,7 +210,10 @@ const HomePage = () => {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <Download className="w-6 h-6" />
+                            <Download
+                              className="w-6 h-6"
+                              onClick={handleDownload}
+                            />
                           </TooltipTrigger>
                           <TooltipContent>
                             <p>Descargar</p>
