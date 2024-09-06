@@ -112,18 +112,24 @@ const HomePage = () => {
         canvas.width = 900;
         canvas.height = 500;
 
-        const backgroundImg = new Image();
-        backgroundImg.src = backgroundImage
-          .replace('url("', "")
-          .replace('")', "");
+        const imageUrl = backgroundImage.match(
+          /url\(["']?([^"')]+)["']?\)/
+        )?.[1];
 
-        await new Promise((resolve) => {
+        if (!imageUrl) {
+          throw new Error("Invalid background image URL");
+        }
+
+        const backgroundImg = new Image();
+        backgroundImg.src = imageUrl;
+
+        await new Promise((resolve, reject) => {
           backgroundImg.onload = resolve;
+          backgroundImg.onerror = reject;
         });
 
         context?.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
-        context!.font = "50px Pacifico";
         context!.fillStyle = "white";
         context!.textAlign = "center";
         context!.shadowColor = "black";
@@ -131,11 +137,58 @@ const HomePage = () => {
         context!.shadowOffsetX = 5;
         context!.shadowOffsetY = 5;
 
-        context?.fillText(quote, canvas.width / 2, canvas.height / 2);
+        // Set desired font size
+        context!.font = "50px Pacifico, sans-serif";
 
-        if (author !== "Anonymous") {
-          context!.font = "30px Roboto";
-          context!.fillText(author, canvas.width / 2, canvas.height / 2 + 50);
+        // Function to wrap text to fit within the canvas
+        const wrapText = (
+          context: CanvasRenderingContext2D,
+          text: string,
+          x: number,
+          y: number,
+          maxWidth: number,
+          lineHeight: number
+        ) => {
+          const words = text.split(" ");
+          let line = "";
+          let yOffset = 0;
+
+          for (let i = 0; i < words.length; i++) {
+            const testLine = line + words[i] + " ";
+            const metrics = context.measureText(testLine);
+            const testWidth = metrics.width;
+
+            if (testWidth > maxWidth && i > 0) {
+              context.fillText(line, x, y + yOffset);
+              line = words[i] + " ";
+              yOffset += lineHeight;
+            } else {
+              line = testLine;
+            }
+          }
+
+          context.fillText(line, x, y + yOffset);
+          return yOffset + lineHeight; // return the total height used by the text
+        };
+
+        const lineHeight = 60; // Set line height for the wrapped text
+        const textX = canvas.width / 2; // Center X coordinate
+        const textY = canvas.height / 2 - 30; // Start Y coordinate
+
+        // Wrap and draw the quote text
+        const usedHeight = wrapText(
+          context!,
+          quote,
+          textX,
+          textY,
+          canvas.width - 40,
+          lineHeight
+        );
+
+        // Draw author text below the quote if it exists and is not "Anonymous"
+        if (author && author !== "Anonymous") {
+          context!.font = "30px Roboto, sans-serif";
+          context!.fillText(author, textX, textY + usedHeight);
         }
 
         const imageData = canvas.toDataURL("image/png");
