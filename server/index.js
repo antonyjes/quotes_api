@@ -53,7 +53,6 @@ const adminUpload = multer({ storage: adminStorage });
 const userUpload = multer({ storage: userStorage });
 
 // ROUTES WITH FILES
-app.post("/user/register", userUpload.fields([{ name: "picture" }]), registerUser);
 app.post("/admin/register", adminUpload.fields([{ name: "picture" }]), registerAdmin);
 
 // ROUTES
