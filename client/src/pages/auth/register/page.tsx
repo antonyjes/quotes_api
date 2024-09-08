@@ -21,31 +21,28 @@ const RegisterPage = () => {
     const [lastName, setLastName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [picture, setPicture] = useState<File | null>(null);
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-          setPicture(file);
-        }
-    }
 
   const onSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    
-    const formData = new FormData();
-    formData.append("firstName", firstName);
-    formData.append("lastName", lastName);
-    formData.append("email", email);
-    formData.append("password", password);
-    if (picture) {
-      formData.append("picture", picture);
-    }
 
-    const response = await fetch("http://localhost:3003/user/register", {
+    const response = await fetch("http://localhost:3003/auth/register", {
       method: "POST",
-      body: formData,        
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+      })       
     });
+
+    if (!response.ok) {
+        const error = await response.json();
+        toast.error(error.message);
+        throw new Error(error.message);
+    }
 
     const data = await response.json();
 
@@ -112,10 +109,6 @@ const RegisterPage = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                     />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="photo">Foto de perfil</Label>
-                    <Input id="photo" type="file" onChange={handleImageChange}/>
                   </div>
                 </CardContent>
                 <CardFooter className="grid gap-2">
