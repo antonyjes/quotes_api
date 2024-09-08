@@ -25,28 +25,28 @@ export const registerUser = async (req, res) => {
 };
 
 // REGISTER ADMIN
-export const registerAdmin = async (req, res) => {
-  try {
-    const { firstName, lastName, email, password } = req.body;
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
-    const pictureFile = req.files["picture"][0];
+// export const registerAdmin = async (req, res) => {
+//   try {
+//     const { firstName, lastName, email, password } = req.body;
+//     const salt = await bcrypt.genSalt();
+//     const passwordHash = await bcrypt.hash(password, salt);
+//     const pictureFile = req.files["picture"][0];
 
-    const newAdmin = new User({
-      firstName,
-      lastName,
-      email,
-      password: passwordHash,
-      picturePath: pictureFile ? pictureFile.filename : null,
-      role: "ADMIN",
-    });
+//     const newAdmin = new User({
+//       firstName,
+//       lastName,
+//       email,
+//       password: passwordHash,
+//       picturePath: pictureFile ? pictureFile.filename : null,
+//       role: "ADMIN",
+//     });
 
-    const savedAdmin = await newAdmin.save();
-    res.status(201).json(savedAdmin);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+//     const savedAdmin = await newAdmin.save();
+//     res.status(201).json(savedAdmin);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 // LOGIN
 export const login = async (req, res) => {
