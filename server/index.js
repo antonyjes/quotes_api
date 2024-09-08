@@ -9,7 +9,6 @@ import { fileURLToPath } from "url";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import multer from "multer";
-import { registerUser, registerAdmin } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js";
 import quoteRoutes from "./routes/quote.js";
 
