@@ -4,7 +4,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { User } from "@/lib/data";
 import { Bookmark, Download, TwitterIcon } from "lucide-react";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 export const QuoteSection = ({
@@ -16,121 +18,108 @@ export const QuoteSection = ({
   backgroundImage: string;
   quote: string;
   author: string;
-  user: boolean;
+  user: User | null;
 }) => {
-  const handleTwitterShare = async () => {
-    try {
-      if (user) {
-        console.log("You can share this quote");
-      } else {
-        toast.error("Inicia sesion para compartir");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const token = useSelector((state: {token: string}) => state.token);
+
+  // Helper function to extract the image URL from the backgroundImage string
+  const getImageUrl = (backgroundImage: string) => {
+    return backgroundImage.match(/url\(["']?([^"')]+)["']?\)/)?.[1];
   };
 
-  const handleBookmark = async () => {
-    try {
-      if (user) {
-        console.log("You can bookmark this quote");
-      } else {
-        toast.error("Inicia sesion para guardar");
-      }
-    } catch (error) {
-      console.log(error);
+  // Function to generate the image and return its data URL
+  const createQuoteImage = async () => {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+
+    canvas.width = 900;
+    canvas.height = 500;
+
+    const imageUrl = getImageUrl(backgroundImage);
+
+    if (!imageUrl) {
+      throw new Error("Invalid background image URL");
     }
+
+    const backgroundImg = new Image();
+    backgroundImg.src = imageUrl;
+
+    await new Promise((resolve, reject) => {
+      backgroundImg.onload = resolve;
+      backgroundImg.onerror = reject;
+    });
+
+    context?.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+
+    context!.fillStyle = "white";
+    context!.textAlign = "center";
+    context!.shadowColor = "black";
+    context!.shadowBlur = 10;
+    context!.shadowOffsetX = 5;
+    context!.shadowOffsetY = 5;
+
+    // Set desired font size
+    context!.font = "50px Pacifico, sans-serif";
+
+    // Function to wrap text to fit within the canvas
+    const wrapText = (
+      context: CanvasRenderingContext2D,
+      text: string,
+      x: number,
+      y: number,
+      maxWidth: number,
+      lineHeight: number
+    ) => {
+      const words = text.split(" ");
+      let line = "";
+      let yOffset = 0;
+
+      for (let i = 0; i < words.length; i++) {
+        const testLine = line + words[i] + " ";
+        const metrics = context.measureText(testLine);
+        const testWidth = metrics.width;
+
+        if (testWidth > maxWidth && i > 0) {
+          context.fillText(line, x, y + yOffset);
+          line = words[i] + " ";
+          yOffset += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+
+      context.fillText(line, x, y + yOffset);
+      return yOffset + lineHeight; // return the total height used by the text
+    };
+
+    const lineHeight = 60; // Set line height for the wrapped text
+    const textX = canvas.width / 2; // Center X coordinate
+    const textY = canvas.height / 2 - 30; // Start Y coordinate
+
+    // Wrap and draw the quote text
+    const usedHeight = wrapText(
+      context!,
+      quote,
+      textX,
+      textY,
+      canvas.width - 40,
+      lineHeight
+    );
+
+    // Draw author text below the quote if it exists and is not "Anonymous"
+    if (author && author !== "Anonymous") {
+      context!.font = "30px Roboto, sans-serif";
+      context!.fillText(author, textX, textY + usedHeight);
+    }
+
+    return canvas.toDataURL("image/png");
   };
 
+  // Function to handle downloading the image
   const handleDownload = async () => {
     try {
       if (user) {
-        const canvas = document.createElement("canvas");
-        const context = canvas.getContext("2d");
-
-        canvas.width = 900;
-        canvas.height = 500;
-
-        const imageUrl = backgroundImage.match(
-          /url\(["']?([^"')]+)["']?\)/
-        )?.[1];
-
-        if (!imageUrl) {
-          throw new Error("Invalid background image URL");
-        }
-
-        const backgroundImg = new Image();
-        backgroundImg.src = imageUrl;
-
-        await new Promise((resolve, reject) => {
-          backgroundImg.onload = resolve;
-          backgroundImg.onerror = reject;
-        });
-
-        context?.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-
-        context!.fillStyle = "white";
-        context!.textAlign = "center";
-        context!.shadowColor = "black";
-        context!.shadowBlur = 10;
-        context!.shadowOffsetX = 5;
-        context!.shadowOffsetY = 5;
-
-        // Set desired font size
-        context!.font = "50px Pacifico, sans-serif";
-
-        // Function to wrap text to fit within the canvas
-        const wrapText = (
-          context: CanvasRenderingContext2D,
-          text: string,
-          x: number,
-          y: number,
-          maxWidth: number,
-          lineHeight: number
-        ) => {
-          const words = text.split(" ");
-          let line = "";
-          let yOffset = 0;
-
-          for (let i = 0; i < words.length; i++) {
-            const testLine = line + words[i] + " ";
-            const metrics = context.measureText(testLine);
-            const testWidth = metrics.width;
-
-            if (testWidth > maxWidth && i > 0) {
-              context.fillText(line, x, y + yOffset);
-              line = words[i] + " ";
-              yOffset += lineHeight;
-            } else {
-              line = testLine;
-            }
-          }
-
-          context.fillText(line, x, y + yOffset);
-          return yOffset + lineHeight; // return the total height used by the text
-        };
-
-        const lineHeight = 60; // Set line height for the wrapped text
-        const textX = canvas.width / 2; // Center X coordinate
-        const textY = canvas.height / 2 - 30; // Start Y coordinate
-
-        // Wrap and draw the quote text
-        const usedHeight = wrapText(
-          context!,
-          quote,
-          textX,
-          textY,
-          canvas.width - 40,
-          lineHeight
-        );
-
-        // Draw author text below the quote if it exists and is not "Anonymous"
-        if (author && author !== "Anonymous") {
-          context!.font = "30px Roboto, sans-serif";
-          context!.fillText(author, textX, textY + usedHeight);
-        }
-
-        const imageData = canvas.toDataURL("image/png");
+        const imageData = await createQuoteImage();
 
         const downloadLink = document.createElement("a");
         downloadLink.href = imageData;
@@ -139,7 +128,64 @@ export const QuoteSection = ({
         downloadLink.click();
         document.body.removeChild(downloadLink);
       } else {
-        toast.error("Inicia sesion para descargar");
+        toast.error("Inicia sesión para descargar");
+      }
+    } catch (error) {
+      console.log("Error downloading image:", error);
+    }
+  };
+
+  // Function to handle sharing the image on Twitter
+  const handleTwitterShare = async () => {
+    try {
+      if (!user) {
+        toast.error("Inicia sesión para compartir");
+        return;
+      }
+
+      const tweetText = encodeURIComponent(
+        `"${quote}" ${author ? `- ${author}` : ""}`
+      );
+
+      const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}`;
+
+      window.open(twitterUrl, "_blank");
+    } catch (error) {
+      console.error("Error sharing on Twitter:", error);
+      toast.error("Ocurrió un error al intentar compartir en Twitter");
+    }
+  };
+
+  // Function to handle bookmarking the quote
+  const handleBookmark = async () => {
+    try {
+      if (user) {
+        const response = await fetch("http://localhost:3003/quote/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            content: quote,
+            author,
+            bgPath: getImageUrl(backgroundImage),
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          toast.error(error.message);
+          throw new Error(error.message);
+        }
+
+        const savedQuote = await response.json();
+
+        if (savedQuote) {
+          toast.success("Guardado exitosamente");
+        }
+      } else {
+        toast.error("Inicia sesión para guardar");
       }
     } catch (error) {
       console.log(error);
