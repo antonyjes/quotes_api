@@ -80,7 +80,7 @@ const HomePage = () => {
           <Separator />
           <div className="flex items-center justify-center">
             {backgroundImage ? (
-              <QuoteSection backgroundImage={backgroundImage} quote={quote} author={author} user={Boolean(user)} />
+              <QuoteSection backgroundImage={backgroundImage} quote={quote} author={author} user={user} />
             ) : (
               <div role="status">
                 <svg
