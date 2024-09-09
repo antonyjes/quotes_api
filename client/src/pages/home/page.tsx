@@ -4,11 +4,14 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import { rapidApiKey } from "@/lib/config";
 import { useSelector } from "react-redux";
-import { User } from "@/lib/data";
-import { QuoteSection } from "@/components/quote-section";
+import { Quote, User } from "@/lib/data";
+import { QuoteSection } from "@/pages/home/components/quote-section";
+import { QuotesSection } from "@/pages/home/components/quotes";
 
 const HomePage = () => {
   const user = useSelector((state: { user: User | null }) => state.user);
+
+  const [quotes, setQuotes] = useState<Quote[]>([]);
 
   const [quote, setQuote] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
@@ -21,6 +24,16 @@ const HomePage = () => {
     day: "numeric",
   });
 
+  const getQuotes = async () => {
+    try {
+      const response = await fetch("http://localhost:3003/quote/all");
+      const quotes = await response.json();
+      setQuotes(quotes);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+ 
   const preloadImages = () => {
     for (let i = 1; i < 11; i++) {
       const img = new Image();
@@ -67,6 +80,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    getQuotes();
     preloadImages();
     getRandomImage();
     getQuote();
@@ -102,6 +116,12 @@ const HomePage = () => {
                 <span className="sr-only">Loading...</span>
               </div>
             )}
+          </div>
+          <Separator />
+          <div>
+            {
+              <QuotesSection quotes={quotes} />
+            }
           </div>
         </div>
       </div>
