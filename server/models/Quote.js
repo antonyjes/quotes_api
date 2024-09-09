@@ -7,11 +7,14 @@ const QuoteSchema = new mongoose.Schema({
     },
     author: String,
     bgPath: String,
-    topic: String,
+    topic: {
+        type: String,
+        default: "All"
+    },
     submittedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        default: null
     },
     createdAt: {
         type: Date,
