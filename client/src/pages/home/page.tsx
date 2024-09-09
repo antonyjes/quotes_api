@@ -89,7 +89,7 @@ const HomePage = () => {
   return (
     <RootLayout>
       <div className="flex-col">
-        <div className="flex-1 space-y-4 p-8 pt-6">
+        <div className="flex-1 space-y-6 p-8 pt-6">
           <Heading title="La frase de hoy" description={dateToday} />
           <Separator />
           <div className="flex items-center justify-center">
@@ -117,8 +117,11 @@ const HomePage = () => {
               </div>
             )}
           </div>
-          <Separator />
-          <div>
+          <div className="flex justify-center lg:items-center flex-col gap-2">
+            <p className="lg:w-[70%] text-xl font-semibold">More quotes</p>
+            <Separator className="lg:w-[70%]" />
+          </div>          
+          <div className="flex justify-center items-center">
             {
               <QuotesSection quotes={quotes} />
             }
