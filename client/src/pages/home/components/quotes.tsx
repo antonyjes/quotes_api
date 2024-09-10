@@ -2,8 +2,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Pagination, PaginationContent, PaginationItem, PaginationPrevious, PaginationNext } from "@/components/ui/pagination"
 import { Quote } from "@/lib/data"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export const QuotesSection = ({quotes}: {quotes: Quote[]}) => {
+    const navigate = useNavigate();
+
     const quotesPerPage = 5
     const [startIndex, setStartIndex] = useState(0)
     const [endIndex, setEndIndex] = useState(quotesPerPage)
@@ -25,7 +28,7 @@ export const QuotesSection = ({quotes}: {quotes: Quote[]}) => {
     return(
         <div className="flex flex-col gap-2 justify-center lg:w-[70%]">
             {quotes.slice(startIndex, endIndex).map((quote) => (
-                <Card className="p-2 pb-0 cursor-pointer" key={quote._id}>
+                <Card className="p-2 pb-0 cursor-pointer" key={quote._id} onClick={() => navigate(`/quotes/${quote._id}`)}>
                     <CardContent>
                         <p className="text-xl font-bold tracking-tight">{quote.content}</p>
                         {
