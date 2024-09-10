@@ -8,6 +8,8 @@ export interface User{
     role: string
     createdAt: Date
     updatedAt: Date
+    favorites?: string[]
+    submittedQuotes?: string[]
 }
 
 export interface Quote{
@@ -17,6 +19,8 @@ export interface Quote{
     bgPath: string
     topic: string
     submittedBy?: string
+    downloadCount?: number
+    savedCount?: number
     createdAt: Date
     updatedAt: Date
 }
