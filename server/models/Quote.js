@@ -16,6 +16,14 @@ const QuoteSchema = new mongoose.Schema({
         ref: "User",
         default: null
     },
+    downloadCount: {
+        type: Number,
+        default: 0
+    },
+    savedCount: {
+        type: Number,
+        default: 0
+    },
     createdAt: {
         type: Date,
         default: Date.now
