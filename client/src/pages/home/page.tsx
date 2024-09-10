@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { rapidApiKey } from "@/lib/config";
 import { useSelector } from "react-redux";
 import { Quote, User } from "@/lib/data";
-import { QuoteSection } from "@/pages/home/components/quote-section";
+import { QuoteSection } from "@/components/quote-section";
 import { QuotesSection } from "@/pages/home/components/quotes";
 
 const HomePage = () => {

@@ -5,6 +5,7 @@ import LoginPage from "@/pages/auth/login/page";
 import RegisterPage from "@/pages/auth/register/page";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
+import QuotePage from "@/pages/quote/page";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/quotes/:quoteId" element={<QuotePage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
