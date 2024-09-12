@@ -50,6 +50,16 @@ const QuotePage = () => {
             />
           )}
         </div>
+        <div>
+          <div>
+            <p>Guardado</p>
+            <p>{quote.savedCount}</p>
+          </div>
+          <div>
+            <p>Descargado</p>
+            <p>{quote.downloadCount}</p>
+          </div>
+        </div>
       </div>
     </RootLayout>
   );
