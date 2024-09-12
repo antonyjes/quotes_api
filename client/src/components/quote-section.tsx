@@ -14,11 +14,13 @@ export const QuoteSection = ({
   quote,
   author,
   user,
+  quoteId,
 }: {
   backgroundImage: string;
   quote: string;
   author: string;
   user: User | null;
+  quoteId: string | null;
 }) => {
   const token = useSelector((state: {token: string}) => state.token);
 
@@ -160,33 +162,33 @@ export const QuoteSection = ({
   const handleBookmark = async () => {
     try {
       if (user) {
-        const response = await fetch("http://localhost:3003/quote/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            content: quote,
-            author,
-            bgPath: getImageUrl(backgroundImage),
-          }),
-        });
+          const response = await fetch("http://localhost:3003/favorite/save", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              quoteId: quoteId,
+              userId: user._id,
+            })
+          })
 
-        if (!response.ok) {
-          const error = await response.json();
-          toast.error(error.message);
-          throw new Error(error.message);
+          if (!response.ok) {
+            const error = await response.json();
+            toast.error(error.message);
+            throw new Error(error.message);
+          }
+
+          const savedFavorite = await response.json();
+
+          if (savedFavorite) {
+            toast.success("Guardado exitosamente");
+          }
         }
-
-        const savedQuote = await response.json();
-
-        if (savedQuote) {
-          toast.success("Guardado exitosamente");
+        else{
+          toast.error("Inicia sesión para guardar");
         }
-      } else {
-        toast.error("Inicia sesión para guardar");
-      }
     } catch (error) {
       console.log(error);
     }
