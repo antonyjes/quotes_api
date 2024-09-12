@@ -2,10 +2,12 @@ import Quote from "../models/Quote.js";
 
 export const getRamdomQuote = async (req, res) => {
     try {
-        const response = await fetch("https://zenquotes.io/api/random");
-        const data = await response.json();
-        res.status(200).json(data[0]);
+        const quotes = await Quote.find();        
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const quote = quotes[randomIndex];
+        res.status(200).json(quote);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ message: error.message });
     }
 }
@@ -32,11 +34,20 @@ export const getQuote = async (req, res) => {
 export const createQuote = async (req, res) => {
     try {
         const { content, author, bgPath } = req.body;
+
+        const searchContent = await Quote.findOne({ content });
+        const searchBgPath = await Quote.findOne({ bgPath });
+
+        if (searchContent && searchBgPath) {
+            return res.status(400).json({ message: "Quote already exists" });
+        }
+        
         const newQuote = new Quote({
             content,
             author,
             bgPath
         })
+        
         const savedQuote = await newQuote.save();
         res.status(201).json(savedQuote);
     } catch (error) {
