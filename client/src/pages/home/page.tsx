@@ -2,7 +2,6 @@ import { Heading } from "@/components/heading";
 import RootLayout from "@/pages/layout";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
-import { rapidApiKey } from "@/lib/config";
 import { useSelector } from "react-redux";
 import { Quote, User } from "@/lib/data";
 import { QuoteSection } from "@/components/quote-section";
@@ -16,6 +15,7 @@ const HomePage = () => {
   const [quote, setQuote] = useState("");
   const [backgroundImage, setBackgroundImage] = useState("");
   const [author, setAuthor] = useState("Anonymous");
+  const [quoteId, setQuoteId] = useState(null);
 
   const dateToday = new Date().toLocaleDateString("es-MX", {
     weekday: "long",
@@ -32,8 +32,8 @@ const HomePage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
- 
+  };
+
   const preloadImages = () => {
     for (let i = 1; i < 11; i++) {
       const img = new Image();
@@ -41,39 +41,15 @@ const HomePage = () => {
     }
   };
 
-  const getRandomImage = () => {
-    const randomIndex = Math.floor(Math.random() * 10) + 1;
-    setBackgroundImage(`url(/background-images/bg${randomIndex}.png)`);
-  };
-
   const getQuote = async () => {
     try {
       const response = await fetch("http://localhost:3003/quote/random-quote");
       const quote = await response.json();
-      setAuthor(quote.a);
 
-      const data = new FormData();
-      data.append("source_language", "en");
-      data.append("target_language", "es");
-      data.append("text", quote.q);
-
-      const headers = new Headers({
-        "x-rapidapi-host": "text-translator2.p.rapidapi.com",
-        "x-rapidapi-key": rapidApiKey,
-        "Accept-Encoding": "application/gzip",
-      });
-
-      // Translate quote
-      const translatedQuote = await fetch(
-        "https://text-translator2.p.rapidapi.com/translate",
-        {
-          method: "POST",
-          headers: headers,
-          body: data,
-        }
-      );
-      const translated = await translatedQuote.json();
-      setQuote(translated.data.translatedText);
+      setQuote(quote.content)
+      setAuthor(quote.author)
+      setQuoteId(quote._id)
+      setBackgroundImage(`url(${quote.bgPath})`)
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +58,6 @@ const HomePage = () => {
   useEffect(() => {
     getQuotes();
     preloadImages();
-    getRandomImage();
     getQuote();
   }, []);
 
@@ -94,7 +69,13 @@ const HomePage = () => {
           <Separator />
           <div className="flex items-center justify-center">
             {backgroundImage ? (
-              <QuoteSection backgroundImage={backgroundImage} quote={quote} author={author} user={user} />
+              <QuoteSection
+                backgroundImage={backgroundImage}
+                quote={quote}
+                author={author}
+                user={user}
+                quoteId={quoteId}
+              />
             ) : (
               <div role="status">
                 <svg
@@ -120,11 +101,9 @@ const HomePage = () => {
           <div className="flex justify-center lg:items-center flex-col gap-2">
             <p className="lg:w-[70%] text-xl font-semibold">More quotes</p>
             <Separator className="lg:w-[70%]" />
-          </div>          
+          </div>
           <div className="flex justify-center items-center">
-            {
-              <QuotesSection quotes={quotes} />
-            }
+            {<QuotesSection quotes={quotes} />}
           </div>
         </div>
       </div>
