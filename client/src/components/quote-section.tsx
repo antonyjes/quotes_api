@@ -200,7 +200,7 @@ export const QuoteSection = ({
         className="bg-cover bg-center rounded-lg flex items-center justify-center max-w-[900px] h-[500px]"
         style={{ backgroundImage: backgroundImage }}
       >
-        <div className="p-10 text-5xl text-center text-shadow-custom">
+        <div className="p-10 text-5xl text-center text-shadow-custom text-white">
           <p className="font-pacifico">{quote}</p>
           {author && author !== "Anonymous" ? (
             <p className="text-3xl font-bold mt-5">{author}</p>
