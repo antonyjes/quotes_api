@@ -46,6 +46,7 @@ const QuotePage = () => {
               quote={quote.content}
               author={quote.author || ""}
               user={user}
+              quoteId={quote._id}
             />
           )}
         </div>
