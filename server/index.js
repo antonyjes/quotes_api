@@ -11,6 +11,7 @@ import path from "path";
 import multer from "multer";
 import authRoutes from "./routes/auth.js";
 import quoteRoutes from "./routes/quote.js";
+import favoriteRoutes from "./routes/favorite.js";
 
 // CONFIGURATIONS
 const __filename = fileURLToPath(import.meta.url);
@@ -57,6 +58,7 @@ const userUpload = multer({ storage: userStorage });
 // ROUTES
 app.use("/auth", authRoutes);
 app.use("/quote", quoteRoutes);
+app.use("/favorite", favoriteRoutes);
 
 // MONGODB CONNECTION
 const PORT = process.env.PORT || 9000;
