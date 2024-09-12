@@ -129,6 +129,22 @@ export const QuoteSection = ({
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
+
+        const response = await fetch("http://localhost:3003/favorite/update-download", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ quoteId }),
+        })
+
+        if (!response.ok) {
+          const error = await response.json();
+          console.error("Error updating download count:", error);
+        }
+
+        toast.success("Descargado");
       } else {
         toast.error("Inicia sesión para descargar");
       }
