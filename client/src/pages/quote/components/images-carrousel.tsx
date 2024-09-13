@@ -5,7 +5,7 @@ export const ImagesCarrousel = ({setBackgroundImage}: {setBackgroundImage: (imag
     const images: string[] = []
 
     for (let i = 1; i < 11; i++) {
-        images.push(`background-images/bg${i}.png`)
+        images.push(`/background-images/bg${i}.png`)
     }
     
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,7 +35,7 @@ export const ImagesCarrousel = ({setBackgroundImage}: {setBackgroundImage: (imag
                             src={image}
                             alt={`Image ${index + 1}`}
                             className="w-1/4 h-full object-cover cursor-pointer"
-                            onClick={() => setBackgroundImage("/" + image)}
+                            onClick={() => setBackgroundImage(image)}
                         />
                     ))
                 }
