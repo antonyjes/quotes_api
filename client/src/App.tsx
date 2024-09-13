@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css"
 import QuotePage from "@/pages/quote/page";
 import { useSelector } from "react-redux";
 import { User } from "@/lib/data";
-import CreateQuotePage from "@/pages/quote/create";
+import CreateQuotePage from "@/pages/quote/create/page";
 
 function App() {
   const isAuth = Boolean(useSelector((state: { user: User }) => state.user));
