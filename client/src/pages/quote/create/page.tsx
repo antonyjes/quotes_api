@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import RootLayout from "@/pages/layout";
 import { useState } from "react";
-import { ImagesCarrousel } from "./components/images-carrousel";
+import { ImagesCarrousel } from "../components/images-carrousel";
 
 const CreateQuotePage = () => {
   const [content, setContent] = useState<string>("");
@@ -20,7 +20,7 @@ const CreateQuotePage = () => {
         <div className="flex-1 space-y-6 p-8 pt-6">
           <Heading title="Create Quote" description="Create a new quote" />
           <Separator />
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center flex-col gap-4 w-full">
             <Card>
               <CardHeader>
                 <CardTitle>Enter the content of the quote</CardTitle>
@@ -56,7 +56,7 @@ const CreateQuotePage = () => {
                 </div>
               </CardContent>
             </Card>
-            <div>
+            <div className="w-full">
               <div
                 className="bg-cover bg-center rounded-lg flex items-center justify-center max-w-[900px] h-[500px]"
                 style={{ backgroundImage: `url(${backgroundImage})` }}
