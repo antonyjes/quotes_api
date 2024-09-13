@@ -6,8 +6,14 @@ import { useSelector } from "react-redux";
 import { Quote, User } from "@/lib/data";
 import { QuoteSection } from "@/components/quote-section";
 import { QuotesSection } from "@/pages/home/components/quotes";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
   const user = useSelector((state: { user: User | null }) => state.user);
 
   const [quotes, setQuotes] = useState<Quote[]>([]);
@@ -55,6 +61,15 @@ const HomePage = () => {
     }
   };
 
+  const handleNewQuote = () => {
+    if (!user){
+      toast.error("Inicia sesión para crear una frase");
+      return;
+    }
+
+    navigate("/quotes/create");
+  }
+
   useEffect(() => {
     getQuotes();
     preloadImages();
@@ -65,7 +80,13 @@ const HomePage = () => {
     <RootLayout>
       <div className="flex-col">
         <div className="flex-1 space-y-6 p-8 pt-6">
-          <Heading title="La frase de hoy" description={dateToday} />
+          <div className="flex items-center justify-between">
+            <Heading title="La frase de hoy" description={dateToday} />
+            <Button onClick={handleNewQuote}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Quote
+            </Button>
+          </div>
           <Separator />
           <div className="flex items-center justify-center">
             {backgroundImage ? (
