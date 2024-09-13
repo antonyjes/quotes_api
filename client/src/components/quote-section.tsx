@@ -145,6 +145,8 @@ export const QuoteSection = ({
         }
 
         toast.success("Descargado");
+
+        window.location.reload();
       } else {
         toast.error("Inicia sesión para descargar");
       }
@@ -201,6 +203,8 @@ export const QuoteSection = ({
           if (savedFavorite) {
             toast.success("Guardado exitosamente");
           }
+
+          window.location.reload();
         }
         else{
           toast.error("Inicia sesión para guardar");
