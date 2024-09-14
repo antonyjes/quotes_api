@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import RootLayout from "@/pages/layout";
 import { useState } from "react";
-import { ImagesCarrousel } from "../components/images-carrousel";
+import { ImagesCarrousel } from "@/pages/quotes/components/images-carrousel";
 import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { User } from "@/lib/data";

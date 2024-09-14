@@ -5,10 +5,10 @@ import LoginPage from "@/pages/auth/login/page";
 import RegisterPage from "@/pages/auth/register/page";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"
-import QuotePage from "@/pages/quote/page";
+import QuotePage from "@/pages/quotes/page";
 import { useSelector } from "react-redux";
 import { User } from "@/lib/data";
-import CreateQuotePage from "@/pages/quote/create/page";
+import CreateQuotePage from "@/pages/quotes/create/page";
 
 function App() {
   const isAuth = Boolean(useSelector((state: { user: User }) => state.user));
