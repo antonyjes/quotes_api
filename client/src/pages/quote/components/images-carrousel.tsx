@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeftCircle, ChevronRightCircle } from "lucide-react";
 import { useState } from "react"
 
 export const ImagesCarrousel = ({setBackgroundImage}: {setBackgroundImage: (image: string) => void}) => {
@@ -40,8 +40,8 @@ export const ImagesCarrousel = ({setBackgroundImage}: {setBackgroundImage: (imag
                     ))
                 }
             </div>
-            <ChevronLeft onClick={handlePrev} className="absolute top-1/2 left-4 transform -translate-y-1/2 rounded-full bg-white p-2 cursor-pointer" />
-            <ChevronRight onClick={handleNext} className="absolute top-1/2 right-4 transform -translate-y-1/2 rounded-full bg-white p-2 cursor-pointer" />
+            <ChevronLeftCircle onClick={handlePrev} className="absolute top-1/2 left-4 transform -translate-y-1/2 rounded-full p-2 cursor-pointer h-12 w-12" />
+            <ChevronRightCircle onClick={handleNext} className="absolute top-1/2 right-4 transform -translate-y-1/2 rounded-full p-2 cursor-pointer h-12 w-12" />
         </div>
     )
 }

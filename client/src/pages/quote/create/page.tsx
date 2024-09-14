@@ -56,9 +56,9 @@ const CreateQuotePage = () => {
                 </div>
               </CardContent>
             </Card>
-            <div className="w-full">
+            <div className="flex items-center justify-center flex-col max-w-3xl gap-2">
               <div
-                className="bg-cover bg-center rounded-lg flex items-center justify-center max-w-[900px] h-[500px]"
+                className="bg-cover bg-center rounded-lg flex items-center justify-center w-full h-[500px]"
                 style={{ backgroundImage: `url(${backgroundImage})` }}
               >
                 <div className="p-10 text-5xl text-center text-shadow-custom text-white">
