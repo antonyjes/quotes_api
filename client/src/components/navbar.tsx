@@ -30,6 +30,8 @@ export const Navbar = () => {
   );
   const user = useSelector((state: { user: User }) => state.user);
 
+  const isFavoritesActive = useLocation().pathname === "/favorites";
+
   const routes = [
     {
       href: "/",
@@ -45,11 +47,6 @@ export const Navbar = () => {
       href: "/topics",
       label: "Temas",
       active: useLocation().pathname === "/topics",
-    },
-    {
-      href: "/day-quote",
-      label: "Cita del día",
-      active: useLocation().pathname === "/day-quote",
     },
   ];
 
@@ -75,6 +72,20 @@ export const Navbar = () => {
               {route.label}
             </a>
           ))}
+          {isAuth && (
+            <a
+              key={"/favorites"}
+              href="/favorites"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                isFavoritesActive
+                  ? "text-black dark:text-white"
+                  : "text-muted-foreground"
+              )}
+            >
+              Favoritos
+            </a>
+          )}
         </nav>
         <div className="hidden lg:flex ml-auto items-center space-x-4">
           <ModeToggle />
@@ -99,7 +110,7 @@ export const Navbar = () => {
                 <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                 <DropdownMenuItem>
                   <Bookmark className="mr-2 h-4 w-4" />
-                  Guardados
+                  Tus frases
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Edit className="mr-2 h-4 w-4" />
@@ -163,7 +174,7 @@ export const Navbar = () => {
               <DropdownMenuSeparator />
               {isAuth ? (
                 <>
-                  <DropdownMenuItem>Guardados</DropdownMenuItem>
+                  <DropdownMenuItem>Tus frases</DropdownMenuItem>
                   <DropdownMenuItem>Editar perfil</DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
