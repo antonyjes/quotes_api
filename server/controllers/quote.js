@@ -1,4 +1,5 @@
 import Quote from "../models/Quote.js";
+import User from "../models/User.js";
 
 export const getRamdomQuote = async (req, res) => {
     try {
@@ -33,7 +34,7 @@ export const getQuote = async (req, res) => {
 
 export const createQuote = async (req, res) => {
     try {
-        const { content, author, bgPath } = req.body;
+        const { content, topic, author, bgPath, submittedBy } = req.body;
 
         const searchContent = await Quote.findOne({ content });
         const searchBgPath = await Quote.findOne({ bgPath });
@@ -45,10 +46,21 @@ export const createQuote = async (req, res) => {
         const newQuote = new Quote({
             content,
             author,
-            bgPath
+            bgPath,
+            topic: topic || "All",
+            submittedBy: submittedBy || null
         })
         
         const savedQuote = await newQuote.save();
+
+        if (submittedBy) {
+            const user = await User.findByIdAndUpdate(submittedBy, {
+                $push: {
+                    submittedQuotes: savedQuote._id
+                }
+            })
+        }
+
         res.status(201).json(savedQuote);
     } catch (error) {
         res.status(500).json({ message: error.message });
