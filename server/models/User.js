@@ -15,7 +15,7 @@ const UserSchema = new moongoose.Schema({
     }],
     submittedQuotes: [{
         type: moongoose.Schema.Types.ObjectId,
-        ref: "SubmittedQuote"
+        ref: "Quote"
     }]
 })
 
