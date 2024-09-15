@@ -52,3 +52,16 @@ export const updateDownloadCount = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+export const getFavoritesByUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const favoriteQuotes = await Favorite.find({ user: userId }).populate("quote");
+        console.log(favoriteQuotes);
+
+        res.status(200).json(favoriteQuotes.map(quote => quote.quote));
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
