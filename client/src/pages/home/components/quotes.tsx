@@ -4,10 +4,10 @@ import { Quote } from "@/lib/data"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-export const QuotesSection = ({quotes}: {quotes: Quote[]}) => {
+export const QuotesSection = ({quotes, perPage}: {quotes: Quote[], perPage: number}) => {
     const navigate = useNavigate();
 
-    const quotesPerPage = 5
+    const quotesPerPage = perPage
     const [startIndex, setStartIndex] = useState(0)
     const [endIndex, setEndIndex] = useState(quotesPerPage)
 

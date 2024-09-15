@@ -52,23 +52,23 @@ const HomePage = () => {
       const response = await fetch("http://localhost:3003/quote/random-quote");
       const quote = await response.json();
 
-      setQuote(quote.content)
-      setAuthor(quote.author)
-      setQuoteId(quote._id)
-      setBackgroundImage(`url(${quote.bgPath})`)
+      setQuote(quote.content);
+      setAuthor(quote.author);
+      setQuoteId(quote._id);
+      setBackgroundImage(`url(${quote.bgPath})`);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleNewQuote = () => {
-    if (!user){
+    if (!user) {
       toast.error("Inicia sesión para crear una frase");
       return;
     }
 
     navigate("/quotes/create");
-  }
+  };
 
   useEffect(() => {
     getQuotes();
@@ -124,7 +124,7 @@ const HomePage = () => {
             <Separator className="lg:w-[70%]" />
           </div>
           <div className="flex justify-center items-center">
-            {<QuotesSection quotes={quotes} />}
+            {quotes && <QuotesSection quotes={quotes} perPage={5} />}
           </div>
         </div>
       </div>
