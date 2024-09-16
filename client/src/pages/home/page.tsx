@@ -124,7 +124,7 @@ const HomePage = () => {
             <Separator className="lg:w-[70%]" />
           </div>
           <div className="flex justify-center items-center">
-            {quotes && <QuotesSection quotes={quotes} perPage={5} />}
+            {quotes && <QuotesSection quotes={quotes} perPage={2} />}
           </div>
         </div>
       </div>
