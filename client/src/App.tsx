@@ -11,6 +11,7 @@ import { User } from "@/lib/data";
 import CreateQuotePage from "@/pages/quotes/create/page";
 import FavoritesPage from "@/pages/favorites/page";
 import AuthorsPage from "@/pages/authors/page";
+import TopicsPage from "@/pages/topics/page";
 
 function App() {
   const isAuth = Boolean(useSelector((state: { user: User }) => state.user));
@@ -28,6 +29,7 @@ function App() {
             <Route path="/quotes/create" element={isAuth ? <CreateQuotePage /> : <LoginPage />} />
             <Route path="/favorites" element={isAuth ? <FavoritesPage /> : <LoginPage />} />
             <Route path="/authors" element={<AuthorsPage />} />
+            <Route path="/topics" element={<TopicsPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
